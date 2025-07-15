@@ -11,6 +11,7 @@ import HistoryPanel from "../components/HistoryPanel";
 import generateProblem from "../utils/generateProblem";
 
 const Home = () => {
+  // State Management
   const [input, setInput] = useState("");
   const [history, setHistory] = useState(
     JSON.parse(localStorage.getItem("calcHistory")) || []
@@ -35,37 +36,27 @@ const Home = () => {
     localStorage.setItem("availableLessons", JSON.stringify(availableLessons));
   }, [history, lessons, availableLessons]);
 
-
-// Handle keyboard input
+  // Handle keyboard input shortcuts
   useEffect(() => {
     const handleKeyPress = (e) => {
       const key = e.key;
-      if (/[0-9+\-*/.()]/.test(key)) {
-        handleClick(key);
-      } else if (key === "Enter") {
-        mode === "practice" ? handlePracticeSubmit() : handleCalculate();
-      } else if (key === "Backspace") {
-        handleBackspace();
-      } else if (key === "Escape") {
-        handleClear();
-      } else if (key === "s") {
-        handleClick("sin(");
-      } else if (key === "c") {
-        handleClick("cos(");
-      } else if (key === "l") {
-        handleClick("log(");
-      } else if (key === "q") {
-        handleClick("sqrt(");
-      }
+
+      if (/[0-9+\-*/.()]/.test(key)) handleClick(key);
+      else if (key === "Enter") mode === "practice" ? handlePracticeSubmit() : handleCalculate();
+      else if (key === "Backspace") handleBackspace();
+      else if (key === "Escape") handleClear();
+      else if (key === "s") handleClick("sin(");
+      else if (key === "c") handleClick("cos(");
+      else if (key === "l") handleClick("log(");
+      else if (key === "q") handleClick("sqrt(");
     };
+
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [input, mode]);
 
   // Handlers
-  const handleClick = (value) => {
-    setInput((prev) => prev + value);
-  };
+  const handleClick = (value) => setInput((prev) => prev + value);
 
   const handleClear = () => {
     setInput("");
@@ -73,9 +64,7 @@ const Home = () => {
     toast.info("Cleared", { autoClose: 2000 });
   };
 
-  const handleBackspace = () => {
-    setInput((prev) => prev.slice(0, -1));
-  };
+  const handleBackspace = () => setInput((prev) => prev.slice(0, -1));
 
   const handleCalculate = () => {
     if (!input) {
@@ -88,12 +77,11 @@ const Home = () => {
       const entry = `${input} = ${result}`;
       setHistory((prev) => [...prev, entry].slice(-10));
       toast.success("Calculation successful!", { autoClose: 2000 });
-    } catch (error) {
+    } catch {
       setInput("Error");
       toast.error("Invalid expression", { autoClose: 3000 });
     }
   };
-
 
   const handlePracticeSubmit = () => {
     if (!input || (!practiceProblem && !currentLesson)) {
@@ -109,6 +97,7 @@ const Home = () => {
         result === correctAnswer ||
         Math.abs(parseFloat(result) - parseFloat(correctAnswer)) < 0.0001
       ) {
+        // Correct answer handling
         setLessons((prev) => ({
           completed: prev.completed + 1,
           streak: prev.streak + 1,
@@ -126,12 +115,13 @@ const Home = () => {
           );
         }
       } else {
+        // Incorrect answer handling
         setLessons((prev) => ({ ...prev, streak: 0 }));
         toast.error(`Incorrect. The answer is ${correctAnswer}. Try again!`, {
           autoClose: 5000,
         });
       }
-    } catch (error) {
+    } catch {
       toast.error("Invalid input", { autoClose: 3000 });
     }
   };
@@ -149,61 +139,75 @@ const Home = () => {
     setInput("");
   };
 
+  // Navigation buttons config
   const navButtons = [
     { label: "Home", icon: <House size={20} />, href: "/" },
-    { label: "History", icon: <History size={20} />, href: "/history" },
+    { label: "History", icon: <History size={20} /> },
   ];
 
+  // Component Render
   return (
     <div className="min-h-screen flex flex-col px-4 py-8 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 text-white transition-colors duration-500">
-      {/* Header */}
+      {/* Header Section */}
       <header className="w-full py-4 px-6 flex justify-between items-center bg-white/10 backdrop-blur-lg sticky top-0 z-50">
-        <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2 bg-gradient-to-r from-teal-400 to-cyan-400 text-transparent bg-clip-text">
-          <Calculator size={28} />
-          Numinary
+        <h1 className="text-3xl font-extrabold flex items-center gap-2 bg-gradient-to-r from-teal-400 to-cyan-400 text-transparent bg-clip-text">
+          <Calculator size={28} /> Numinary
         </h1>
+
         <nav className="flex gap-6 items-center">
-          {navButtons.map((btn) => (
-            <Link
-              key={btn.label}
-              to={btn.href}
-              className="font-medium px-5 py-2 cursor-pointer rounded-full flex items-center gap-2 transition-all duration-300 bg-teal-600 text-white hover:bg-white/20"
-            >
-              {btn.icon}
-              {btn.label}
-            </Link>
-          ))}
+          {navButtons.map((btn) =>
+            btn.label === "History" ? (
+              <button
+                key={btn.label}
+                onClick={() => setShowHistory((prev) => !prev)}
+                className="font-medium px-5 py-2 rounded-full flex items-center gap-2 transition bg-teal-600 text-white hover:bg-white/20"
+              >
+                {btn.icon}
+                {btn.label}
+              </button>
+            ) : (
+              <Link
+                key={btn.label}
+                to={btn.href}
+                className="font-medium px-5 py-2 rounded-full flex items-center gap-2 transition bg-teal-600 text-white hover:bg-white/20"
+              >
+                {btn.icon}
+                {btn.label}
+              </Link>
+            )
+          )}
         </nav>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content Section */}
       <motion.div
-        className="max-w-4xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
+        className="max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        {/* Left Column: Calculator */}
-        <div>
-          <CalculatorPage
-            input={input}
-            setInput={setInput}
-            history={history}
-            setHistory={setHistory}
-            mode={mode}
-            setMode={setMode}
-            currentLesson={currentLesson}
-            setCurrentLesson={setCurrentLesson}
-            practiceProblem={practiceProblem}
-            setPracticeProblem={setPracticeProblem}
-            handleClear={handleClear}
-            selectedTopic={selectedTopic}
-            setSelectedTopic={setSelectedTopic}
-            handlePracticeSubmit={handlePracticeSubmit}
-          />
-        </div>
+        {/* History Panel */}
+        <HistoryPanel history={history} showHistory={showHistory} />
 
-        {/* Right Column: Lessons & Progress */}
+        {/* Calculator Component */}
+        <CalculatorPage
+          input={input}
+          setInput={setInput}
+          history={history}
+          setHistory={setHistory}
+          mode={mode}
+          setMode={setMode}
+          currentLesson={currentLesson}
+          setCurrentLesson={setCurrentLesson}
+          practiceProblem={practiceProblem}
+          setPracticeProblem={setPracticeProblem}
+          handleClear={handleClear}
+          selectedTopic={selectedTopic}
+          setSelectedTopic={setSelectedTopic}
+          handlePracticeSubmit={handlePracticeSubmit}
+        />
+
+        {/* Lessons & Progress */}
         <div className="space-y-6">
           {/* Progress Dashboard */}
           <motion.div
@@ -213,8 +217,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <Trophy size={24} />
-              Your Progress
+              <Trophy size={24} /> Your Progress
             </h3>
             <p>Lessons Completed: {lessons.completed}</p>
             <p>
@@ -239,33 +242,18 @@ const Home = () => {
               availableLessons={availableLessons}
               selectedTopic={selectedTopic}
               startLesson={startLesson}
+              startPractice={startPractice}
+              generateProblem={generateProblem}
             />
           </motion.div>
         </div>
-
-        {/* History Panel */}
-        <HistoryPanel history={history} showHistory={showHistory} />
       </motion.div>
 
-      {/* Footer */}
+      {/* Footer*/}
       <footer className="w-full py-8 px-6 text-center bg-white/10 backdrop-blur-md mt-12">
         <p className="text-sm opacity-80">
           © 2025 Numinary. All rights reserved.
         </p>
-        <div className="mt-4 space-x-6">
-          <Link
-            to="/about"
-            className="text-sm opacity-80 hover:opacity-100 transition-all"
-          >
-            About
-          </Link>
-          <Link
-            to="/contact"
-            className="text-sm opacity-80 hover:opacity-100 transition-all"
-          >
-            Contact
-          </Link>
-        </div>
       </footer>
     </div>
   );

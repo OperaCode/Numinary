@@ -19,6 +19,9 @@ const Calculator = ({
   setSelectedTopic,
   handlePracticeSubmit,
 }) => {
+
+    console.log("input:", input, "setInput:", setInput);
+
   const handleClick = (value) => {
     setInput((prev) => prev + value);
   };

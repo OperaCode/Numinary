@@ -194,7 +194,7 @@ const Landing = () => {
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                className={`p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-xl border border-gray-100/20 mb-4 text-white text-gray-900`}
+                className="p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-xl border border-gray-100/20 mb-4 text-white "
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}

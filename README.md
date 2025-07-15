@@ -1,12 +1,43 @@
-# React + Vite
+# ✨ Numinary
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Numinary** is an intuitive web-based calculator and learning platform that combines **powerful calculations** with **practice questions** to strengthen your math skills daily.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 **Features**
+
+- 🔢 **Calculator:** Evaluate math expressions .
+- 📝 **Practice Problems:** Generate random practice questions across topics to test your understanding.
+- 🎯 **Lessons Module:** Learn concepts progressively with structured lessons.
+- 🔥 **Streak & Progress Tracking:** Stay motivated with daily streaks, completion stats, and badges.
+- 📜 **Calculation History:** Access your recent calculations anytime for quick reference.
+- 🌙 **Clean UI:** Responsive, modern design for a smooth learning and calculation experience.
+
+---
+
+
+## 💻 **Tech Stack**
+
+- **Frontend:** React.js, Tailwind CSS, Framer Motion
+- **State Management:** React Hooks
+- **Math Engine:** Math.js
+- **Icons:** Lucide React
+- **Deployment:** Vercel
+
+---
+
+## ⚙️ **Getting Started**
+
+### 🔧 **Prerequisites**
+
+- Node.js 
+- npm or yarn
+
+### 📥 **Installation**
+
+```bash
+git clone https://github.com/OperaCode/Numinary.git
+cd numinary
+npm install
